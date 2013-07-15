@@ -1,0 +1,5 @@
+To fix the unevaluated derivatives in laplace and integrate involving
+the doublet functional, should use sdiff.
+
+Note: need separate cases to handle f as an atom (i.e. abstract
+function) vs. real functions.
