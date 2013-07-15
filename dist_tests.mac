@@ -1,0 +1,201 @@
+(kill(all),0)
+0$
+
+%test heaviside
+
+heaviside(-1);
+0$
+
+heaviside(1);
+1$
+
+heaviside(0);
+1$
+
+heaviside(3*x);
+heaviside(x)$
+
+%test delta
+
+delta(-1);
+0$
+
+delta(1);
+0$
+
+delta(3*x);
+delta(x)/3$
+
+0*delta(x);
+0$
+
+delta(-3*x);
+delta(x)/3$
+
+delta(0): error
+delta(0*x): error
+
+%test doublet
+
+doublet(-1);
+0$
+
+doublet(1);
+0$
+
+0*doublet(x);
+0$
+
+doublet(3*x);
+doublet(x)/9$
+
+doublet(-3*x);
+-doublet(x)/9$
+
+doublet(0): error
+doublet(0*x): error
+%note: make a few tests involving assumptions, such as doublet(a*x) with a
+%assumed to be a real number
+
+%derivative tests
+
+diff(delta(t),t);
+doublet(t)$
+
+diff(delta(-3*t+2),t);
+-3*doublet(-3*t+2)$
+
+diff(heaviside(t),t);
+delta(t)$
+
+diff(heaviside(-3*t+2),t);
+-3*delta(-3*t+2)$
+
+diff(t^2*delta(2*t),t);
+2*t*delta(2*t) + 2*t^2*doublet(2*t)$
+
+diff(t^2*heaviside(2*t),t);
+2*t*heaviside(2*t) + 2*t^2*delta(2*t)$
+
+%indefinite integral tests
+
+integrate(doublet(x),x);
+delta(x)$
+
+integrate(delta(x),x);
+heaviside(x)$
+
+integrate(heaviside(x),x);
+x*heaviside(x)$
+
+%definite integral tests
+integrate(heaviside(x-2)*f(x),x,1,3);
+integrate(f(x),x,2,3)$
+
+integrate(heaviside(-x+4)*x^2,x,0,5);
+64/3$
+
+integrate(heaviside(x+2)*x,x,1,3);
+0$
+
+%note: make a few tests involving assumptions, such as int(h(t-c),t,a,b) with
+%various assumptions on a,b,c
+
+integrate(delta(x)*f(x),x,-1,1);
+f(0)$
+
+integrate(delta(x)*exp(2*x),x,-2,3);
+1$
+
+integrate(delta(x)*f(x),x,-2,-1);
+0$
+
+integrate(delta(x)*f(x),x,1,2);
+0$
+
+integrate(delta(2*x)*cos(x),x,-4,4);
+1/2$
+
+integrate(delta(2*x-2)*(x^2),x,-4,4);
+1/2$
+
+integrate(delta(2*x-2)*x^2,x,-3,1/2);
+0$
+
+integrate(delta(2*x-2)*x^2,x,0,1)
+%see above note.  Also, here we will have to add a fifth argument to the
+%integrate command to indicate a closed or open interval, and we have to
+%decide which is the default.
+
+integrate(doublet(x)*f(x),x,-1,1);
+f'(0)$
+
+integrate(doublet(x)*exp(2*x),x,-2,3);
+2$
+
+integrate(doublet(x)*f(x),x,-2,-1);
+0$
+
+integrate(doublet(x)*f(x),x,1,2);
+0$
+
+integrate(doublet(2*x)*cos(x),x,-4,4): 
+integrate(doublet(2*x-2)*(x^2),x,-4-4):
+ 
+integrate(doublet(2*x-2)*x^2,x,-3,1/2);
+0$
+
+integrate(doublet(2*x-2)*x^2,x,0,1)
+%see notes about assumptions and open/closed interval
+
+%Verify abstract linearity
+laplace(f(t)+g(t),t,s) : laplace(f(t),t,s) + laplace(g(t),t,s)
+laplace(a*f(t),t,s): a*laplace(f(t),t,s)
+laplace(a*f(t)+b*g(t),t,s): a*laplace(f(t),t,s) + b*laplace(g(t),t,s)
+
+%Verify "naked" functions laplace transforms
+sin(5*t)
+sin(a*t)
+sin(5*t+1)
+sin(a*t+b)
+sinh(5*t)
+sinh(a*t)
+sinh(5*t+1)
+sinh(a*t+b)
+cos(6*t)
+cos(a*t)
+cos(5*t+1)
+cos(a*t+b)
+cosh(5*t)
+cosh(a*t)
+cosh(5*t+1)
+cosh(a*t+b)
+exp(-2*t)
+exp(a*t)
+log(3*t)
+log(a*t)
+erf(2*t)
+erf(a*t)
+erf(2*t+3) (question: do we want a*t+b, or just a*t?)
+erf(a*t+b)
+bessel_j(3,4*t)
+bessel_j(n,a*t)
+heaviside(3*t)
+heaviside(2*t+4)
+heaviside(-2*t+4)
+heaviside(a*t+b) %for various assumptions
+delta(3*t)
+delta(2*t+4)
+delta(-2*t+4)
+delta(a*t+b) %for various assumptions
+doublet(3*t)
+doublet(2*t+4)
+doublet(-2*t+4)
+doublet(a*t+b) %for various assumptions
+
+%think up more laplace tests involving products, exponentials, derivatives,
+%integrals and invlaps
+
+%inverse laplace tests needed
+
+%desolve tests needed
